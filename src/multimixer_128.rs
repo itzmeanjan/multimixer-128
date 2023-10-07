@@ -2,7 +2,7 @@
 ///
 /// Given eight 32 -bit words as input, this routine applies F-128 and returns eight 64 -bit words.
 #[inline(always)]
-fn f_128(x: &[u32; 8]) -> [u64; 8] {
+pub fn f_128(x: &[u32; 8]) -> [u64; 8] {
     let mut u = [0u32; 4];
     let mut v = [0u32; 4];
 

@@ -11,6 +11,19 @@ license = "MIT"
 keywords = ["cryptography", "keyed-hashing", "hashing"]
 categories = ["cryptography"]
 
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[features]
+internal = []
 
 [dependencies]
+
+[dev-dependencies]
+rand = "0.8.5"
+criterion = "0.5.1"
+
+[lib]
+bench = false
+
+[[bench]]
+name = "multimixer_128"
+harness = false
+required-features = ["internal"]
