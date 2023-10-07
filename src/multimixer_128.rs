@@ -1,3 +1,5 @@
+use crunchy::unroll;
+
 /// Each message block of Multimixer-128 is 32 -bytes wide.
 pub const BLOCK_SIZE: usize = 32;
 /// Message digest produced by Multimixer-128 is 64 -bytes wide.
@@ -58,8 +60,11 @@ fn get_data_block(data: &[u8], blk: &mut [u32; 8]) {
 #[inline(always)]
 fn add_blocks(blk_a: &[u32; 8], blk_b: &[u32; 8]) -> [u32; 8] {
     let mut res = [0u32; 8];
-    for i in 0..8 {
-        res[i] = blk_a[i].wrapping_add(blk_b[i]);
+
+    unroll! {
+        for i in 0..8 {
+            res[i] = blk_a[i].wrapping_add(blk_b[i]);
+        }
     }
     res
 }
@@ -68,8 +73,10 @@ fn add_blocks(blk_a: &[u32; 8], blk_b: &[u32; 8]) -> [u32; 8] {
 /// by performing word-wise ( each word is of 64 -bits ) modulo addition ( modulo 2**64 ).
 #[inline(always)]
 fn add_into_result(h: &mut [u64; 8], z: &[u64; 8]) {
-    for i in 0..8 {
-        h[i] = h[i].wrapping_add(z[i]);
+    unroll! {
+        for i in 0..8 {
+            h[i] = h[i].wrapping_add(z[i]);
+        }
     }
 }
 
@@ -107,8 +114,10 @@ pub fn multimixer_128(key: &[u8], msg: &[u8], dig: &mut [u8; DIGEST_SIZE]) {
     }
 
     // Unpack digest words as little-endian bytes.
-    for i in 0..8 {
-        let off = i * 8;
-        dig[off..(off + 8)].copy_from_slice(&h[i].to_le_bytes());
+    unroll! {
+        for i in 0..8 {
+            let off = i * 8;
+            dig[off..(off + 8)].copy_from_slice(&h[i].to_le_bytes());
+        }
     }
 }
