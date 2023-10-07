@@ -1,5 +1,7 @@
-// Each message block of Multimixer-128 is 32 -bytes wide.
+/// Each message block of Multimixer-128 is 32 -bytes wide.
 pub const BLOCK_SIZE: usize = 32;
+/// Message digest produced by Multimixer-128 is 64 -bytes wide.
+pub const DIGEST_SIZE: usize = BLOCK_SIZE * 2;
 
 /// The public function of universal keyed hashing Multimixer, F-128
 ///
@@ -77,7 +79,7 @@ fn add_into_result(h: &mut [u64; 8], z: &[u64; 8]) {
 ///
 /// This is an implementation of algorithm 1, in section 3 of paper https://ia.cr/2023/1357.
 #[inline(always)]
-pub fn multimixer_128(key: &[u8], msg: &[u8], dig: &mut [u8; 64]) {
+pub fn multimixer_128(key: &[u8], msg: &[u8], dig: &mut [u8; DIGEST_SIZE]) {
     debug_assert!(msg.len() > 0, "Message must be non-empty !");
     debug_assert!(
         key.len() == msg.len(),
