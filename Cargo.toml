@@ -1,0 +1,29 @@
+[package]
+name = "multimixer-128"
+version = "0.1.0"
+edition = "2021"
+authors = ["Anjan Roy <hello@itzmeanjan.in>"]
+description = "Universal Keyed Hashing Based on Integer Multiplication"
+documentation = "https://github.com/itzmeanjan/multimixer-128"
+readme = "README.md"
+repository = "https://github.com/itzmeanjan/multimixer-128.git"
+license = "MIT"
+keywords = ["cryptography", "keyed-hashing", "hashing"]
+categories = ["cryptography"]
+
+[features]
+internal = []
+
+[dependencies]
+
+[dev-dependencies]
+rand = "0.8.5"
+criterion = "0.5.1"
+
+[lib]
+bench = false
+
+[[bench]]
+name = "multimixer_128"
+harness = false
+required-features = ["internal"]
