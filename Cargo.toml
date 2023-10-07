@@ -1,0 +1,16 @@
+[package]
+name = "multimixer-128"
+version = "0.1.0"
+edition = "2021"
+authors = ["Anjan Roy <hello@itzmeanjan.in>"]
+description = "Universal Keyed Hashing Based on Integer Multiplication"
+documentation = "https://github.com/itzmeanjan/multimixer-128"
+readme = "README.md"
+repository = "https://github.com/itzmeanjan/multimixer-128.git"
+license = "MIT"
+keywords = ["cryptography", "keyed-hashing", "hashing"]
+categories = ["cryptography"]
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
