@@ -1,7 +1,22 @@
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion, Throughput};
+use criterion_cycles_per_byte::CyclesPerByte;
 use rand::{thread_rng, Rng, RngCore};
 
-fn f_128(c: &mut Criterion) {
+#[cfg(any(
+    target_arch = "x86_64",
+    target_arch = "x86",
+    target_arch = "loongarch64"
+))]
+type CriterionCPB = Criterion<CyclesPerByte>;
+
+#[cfg(not(any(
+    target_arch = "x86_64",
+    target_arch = "x86",
+    target_arch = "loongarch64"
+)))]
+type CriterionCPB = Criterion;
+
+fn f_128(c: &mut CriterionCPB) {
     let mut rng = thread_rng();
 
     let mut group = c.benchmark_group("f_128");
@@ -27,7 +42,7 @@ fn f_128(c: &mut Criterion) {
     group.finish();
 }
 
-fn multimixer_128(c: &mut Criterion) {
+fn multimixer_128(c: &mut CriterionCPB) {
     let mut rng = thread_rng();
 
     const MIN_MLEN: usize = multimixer_128::BLOCK_SIZE;
@@ -40,7 +55,7 @@ fn multimixer_128(c: &mut Criterion) {
         let mut group = c.benchmark_group("multimixer_128");
         group.throughput(Throughput::Bytes((2 * mlen) as u64));
 
-        group.bench_function(format!("/{} (cached)", mlen), |bench| {
+        group.bench_function(format!("{} (cached)", mlen), |bench| {
             let mut key = vec![0u8; mlen];
             let mut msg = vec![0u8; mlen];
             let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
@@ -56,7 +71,7 @@ fn multimixer_128(c: &mut Criterion) {
                 )
             })
         });
-        group.bench_function(format!("/{} (random)", mlen), |bench| {
+        group.bench_function(format!("{} (random)", mlen), |bench| {
             let mut key = vec![0u8; mlen];
             let mut msg = vec![0u8; mlen];
             let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
@@ -82,5 +97,18 @@ fn multimixer_128(c: &mut Criterion) {
     }
 }
 
-criterion_group!(name = keyed_hashing; config = Criterion::default(); targets = f_128, multimixer_128);
+#[cfg(any(
+    target_arch = "x86_64",
+    target_arch = "x86",
+    target_arch = "loongarch64"
+))]
+criterion_group!(name = keyed_hashing; config = Criterion::default().with_measurement(CyclesPerByte); targets = f_128, multimixer_128);
+
+#[cfg(not(any(
+    target_arch = "x86_64",
+    target_arch = "x86",
+    target_arch = "loongarch64"
+)))]
+criterion_group!(keyed_hashing, f_128, multimixer_128);
+
 criterion_main!(keyed_hashing);
