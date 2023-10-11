@@ -27,60 +27,60 @@ fn f_128(c: &mut Criterion) {
     group.finish();
 }
 
-fn multimixer_128<const ILEN: usize>(c: &mut Criterion) {
-    assert!((ILEN > 0) && (ILEN % multimixer_128::BLOCK_SIZE == 0));
-
+fn multimixer_128(c: &mut Criterion) {
     let mut rng = thread_rng();
 
-    let mut group = c.benchmark_group("multimixer_128");
-    group.throughput(Throughput::Bytes((2 * ILEN) as u64));
+    const MIN_MLEN: usize = multimixer_128::BLOCK_SIZE;
+    const MAX_MLEN: usize = 4096;
 
-    group.bench_function(format!("/{} (cached)", ILEN), |bench| {
-        let mut key = vec![0u8; ILEN];
-        let mut msg = vec![0u8; ILEN];
-        let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
+    let mut mlen = MIN_MLEN;
+    while mlen <= MAX_MLEN {
+        assert!((mlen > 0) && (mlen % multimixer_128::BLOCK_SIZE == 0));
 
-        rng.fill_bytes(&mut key);
-        rng.fill_bytes(&mut msg);
+        let mut group = c.benchmark_group("multimixer_128");
+        group.throughput(Throughput::Bytes((2 * mlen) as u64));
 
-        bench.iter(|| {
-            multimixer_128::multimixer_128(black_box(&key), black_box(&msg), black_box(&mut dig))
-        })
-    });
-    group.bench_function(format!("/{} (random)", ILEN), |bench| {
-        let mut key = vec![0u8; ILEN];
-        let mut msg = vec![0u8; ILEN];
-        let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
+        group.bench_function(format!("/{} (cached)", mlen), |bench| {
+            let mut key = vec![0u8; mlen];
+            let mut msg = vec![0u8; mlen];
+            let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
 
-        rng.fill_bytes(&mut key);
-        rng.fill_bytes(&mut msg);
+            rng.fill_bytes(&mut key);
+            rng.fill_bytes(&mut msg);
 
-        bench.iter_batched(
-            || (key.clone(), msg.clone()),
-            |(_key, _msg)| {
+            bench.iter(|| {
                 multimixer_128::multimixer_128(
-                    black_box(&_key),
-                    black_box(&_msg),
+                    black_box(&key),
+                    black_box(&msg),
                     black_box(&mut dig),
                 )
-            },
-            BatchSize::SmallInput,
-        )
-    });
+            })
+        });
+        group.bench_function(format!("/{} (random)", mlen), |bench| {
+            let mut key = vec![0u8; mlen];
+            let mut msg = vec![0u8; mlen];
+            let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
 
-    group.finish();
+            rng.fill_bytes(&mut key);
+            rng.fill_bytes(&mut msg);
+
+            bench.iter_batched(
+                || (key.clone(), msg.clone()),
+                |(_key, _msg)| {
+                    multimixer_128::multimixer_128(
+                        black_box(&_key),
+                        black_box(&_msg),
+                        black_box(&mut dig),
+                    )
+                },
+                BatchSize::SmallInput,
+            )
+        });
+
+        group.finish();
+        mlen += multimixer_128::BLOCK_SIZE;
+    }
 }
 
-criterion_group!(
-    keyed_hashing,
-    f_128,
-    multimixer_128<32>,
-    multimixer_128<64>,
-    multimixer_128<128>,
-    multimixer_128<256>,
-    multimixer_128<512>,
-    multimixer_128<1024>,
-    multimixer_128<2048>,
-    multimixer_128<4096>
-);
+criterion_group!(name = keyed_hashing; config = Criterion::default(); targets = f_128, multimixer_128);
 criterion_main!(keyed_hashing);
