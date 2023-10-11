@@ -14,15 +14,28 @@ pub fn f_128(x: &[u32; 8]) -> [u64; 8] {
     let mut u = [0u32; 4];
     let mut v = [0u32; 4];
 
+    // Read definition 9 ( on page 11 ) of specification https://ia.cr/2023/1357,
+    // which provides an alternative definition of F-128.
+    //
+    // u <- Nα · x
+    // s.t. Nα <- circ(1, 1, 1, 0) <- [1, 1, 1, 0]
+    //                                [0, 1, 1, 1]
+    //                                [1, 0, 1, 1]
+    //                                [1, 1, 0, 1]
     u[0] = x[0].wrapping_add(x[1]).wrapping_add(x[2]);
     u[1] = x[1].wrapping_add(x[2]).wrapping_add(x[3]);
     u[2] = x[2].wrapping_add(x[3]).wrapping_add(x[0]);
     u[3] = x[3].wrapping_add(x[0]).wrapping_add(x[1]);
 
-    v[0] = x[4].wrapping_add(x[5]).wrapping_add(x[6]);
-    v[1] = x[5].wrapping_add(x[6]).wrapping_add(x[7]);
-    v[2] = x[6].wrapping_add(x[7]).wrapping_add(x[4]);
-    v[3] = x[7].wrapping_add(x[4]).wrapping_add(x[5]);
+    // v <- Nβ · y
+    // s.t. Nβ <- circ(0, 1, 1, 1) <- [0, 1, 1, 1]
+    //                                [1, 0, 1, 1]
+    //                                [1, 1, 0, 1]
+    //                                [1, 1, 1, 0]
+    v[0] = x[5].wrapping_add(x[6]).wrapping_add(x[7]);
+    v[1] = x[6].wrapping_add(x[7]).wrapping_add(x[4]);
+    v[2] = x[7].wrapping_add(x[4]).wrapping_add(x[5]);
+    v[3] = x[4].wrapping_add(x[5]).wrapping_add(x[6]);
 
     let mut z = [0u64; 8];
 
