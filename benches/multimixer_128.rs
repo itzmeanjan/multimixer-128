@@ -93,7 +93,7 @@ fn multimixer_128(c: &mut CriterionCPB) {
         });
 
         group.finish();
-        mlen += multimixer_128::BLOCK_SIZE;
+        mlen = 2 * mlen;
     }
 }
 
