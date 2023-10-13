@@ -43,117 +43,106 @@ RUSTFLAGS="-C opt-level=3 -C target-cpu=native" cargo bench --features="internal
 ### On 12th Gen Intel(R) Core(TM) i7-1260P
 
 ```bash
-f_128/f-128 (cached)    time:   [8.7446 cycles 8.7943 cycles 8.8479 cycles]
-                        thrpt:  [0.2765 cpb 0.2748 cpb 0.2733 cpb]
-Found 10 outliers among 100 measurements (10.00%)
-  1 (1.00%) low severe
-  3 (3.00%) low mild
-  6 (6.00%) high mild
-f_128/f-128 (random)    time:   [26.3272 cycles 26.4420 cycles 26.5575 cycles]
-                        thrpt:  [0.8299 cpb 0.8263 cpb 0.8227 cpb]
-Found 6 outliers among 100 measurements (6.00%)
-  3 (3.00%) low mild
-  1 (1.00%) high mild
-  2 (2.00%) high severe
+f_128/f-128 (cached)    time:   [8.0854 cycles 8.1049 cycles 8.1252 cycles]
+                        thrpt:  [0.2539 cpb 0.2533 cpb 0.2527 cpb]
+Found 4 outliers among 100 measurements (4.00%)
+  2 (2.00%) low severe
+  2 (2.00%) low mild
+f_128/f-128 (random)    time:   [21.6965 cycles 21.8242 cycles 21.9344 cycles]
+                        thrpt:  [0.6855 cpb 0.6820 cpb 0.6780 cpb]
 
 multimixer_128/32 (cached)
-                        time:   [17.1940 cycles 17.2176 cycles 17.2419 cycles]
-                        thrpt:  [0.2694 cpb 0.2690 cpb 0.2687 cpb]
-Found 5 outliers among 100 measurements (5.00%)
-  4 (4.00%) high mild
-  1 (1.00%) high severe
-multimixer_128/32 (random)
-                        time:   [90.9891 cycles 91.1255 cycles 91.2606 cycles]
-                        thrpt:  [1.4259 cpb 1.4238 cpb 1.4217 cpb]
-Found 16 outliers among 100 measurements (16.00%)
-  6 (6.00%) low severe
+                        time:   [14.9805 cycles 15.0239 cycles 15.0683 cycles]
+                        thrpt:  [0.2354 cpb 0.2347 cpb 0.2341 cpb]
+Found 4 outliers among 100 measurements (4.00%)
   2 (2.00%) low mild
-  3 (3.00%) high mild
-  5 (5.00%) high severe
-
-multimixer_128/64 (cached)
-                        time:   [29.1678 cycles 29.1828 cycles 29.1986 cycles]
-                        thrpt:  [0.2281 cpb 0.2280 cpb 0.2279 cpb]
-Found 5 outliers among 100 measurements (5.00%)
-  1 (1.00%) low mild
-  4 (4.00%) high mild
-multimixer_128/64 (random)
-                        time:   [104.6465 cycles 105.2168 cycles 105.8072 cycles]
-                        thrpt:  [0.8266 cpb 0.8220 cpb 0.8176 cpb]
-Found 2 outliers among 100 measurements (2.00%)
-  1 (1.00%) low severe
-  1 (1.00%) low mild
-
-multimixer_128/128 (cached)
-                        time:   [52.1477 cycles 52.1700 cycles 52.1925 cycles]
-                        thrpt:  [0.2039 cpb 0.2038 cpb 0.2037 cpb]
-Found 5 outliers among 100 measurements (5.00%)
-  1 (1.00%) low mild
-  3 (3.00%) high mild
-  1 (1.00%) high severe
-multimixer_128/128 (random)
-                        time:   [140.1373 cycles 141.3493 cycles 142.7056 cycles]
-                        thrpt:  [0.5574 cpb 0.5521 cpb 0.5474 cpb]
-Found 6 outliers among 100 measurements (6.00%)
-  3 (3.00%) low severe
-  3 (3.00%) low mild
-
-multimixer_128/256 (cached)
-                        time:   [98.4494 cycles 98.5948 cycles 98.7517 cycles]
-                        thrpt:  [0.1929 cpb 0.1926 cpb 0.1923 cpb]
-Found 2 outliers among 100 measurements (2.00%)
   1 (1.00%) high mild
   1 (1.00%) high severe
-multimixer_128/256 (random)
-                        time:   [190.3371 cycles 191.2902 cycles 192.3897 cycles]
-                        thrpt:  [0.3758 cpb 0.3736 cpb 0.3718 cpb]
-Found 9 outliers among 100 measurements (9.00%)
-  5 (5.00%) low severe
-  1 (1.00%) low mild
-  2 (2.00%) high mild
+multimixer_128/32 (random)
+                        time:   [74.6846 cycles 75.5183 cycles 76.5033 cycles]
+                        thrpt:  [1.1954 cpb 1.1800 cpb 1.1669 cpb]
+Found 6 outliers among 100 measurements (6.00%)
+  1 (1.00%) low severe
+  4 (4.00%) high mild
   1 (1.00%) high severe
 
-multimixer_128/512 (cached)
-                        time:   [192.0255 cycles 192.4331 cycles 192.8309 cycles]
-                        thrpt:  [0.1883 cpb 0.1879 cpb 0.1875 cpb]
+multimixer_128/64 (cached)
+                        time:   [24.6028 cycles 24.6415 cycles 24.6819 cycles]
+                        thrpt:  [0.1928 cpb 0.1925 cpb 0.1922 cpb]
 Found 5 outliers among 100 measurements (5.00%)
-  2 (2.00%) low mild
-  2 (2.00%) high mild
-  1 (1.00%) high severe
-multimixer_128/512 (random)
-                        time:   [298.1982 cycles 299.8530 cycles 301.5130 cycles]
-                        thrpt:  [0.2944 cpb 0.2928 cpb 0.2912 cpb]
-
-multimixer_128/1024 (cached)
-                        time:   [389.2597 cycles 389.7680 cycles 390.2933 cycles]
-                        thrpt:  [0.1906 cpb 0.1903 cpb 0.1901 cpb]
-Found 4 outliers among 100 measurements (4.00%)
+  1 (1.00%) low mild
   3 (3.00%) high mild
   1 (1.00%) high severe
+multimixer_128/64 (random)
+                        time:   [86.8100 cycles 87.4062 cycles 88.0316 cycles]
+                        thrpt:  [0.6877 cpb 0.6829 cpb 0.6782 cpb]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low severe
+  6 (6.00%) low mild
+
+multimixer_128/128 (cached)
+                        time:   [42.4531 cycles 42.5529 cycles 42.6533 cycles]
+                        thrpt:  [0.1666 cpb 0.1662 cpb 0.1658 cpb]
+Found 4 outliers among 100 measurements (4.00%)
+  4 (4.00%) high mild
+multimixer_128/128 (random)
+                        time:   [117.9426 cycles 119.1114 cycles 120.4269 cycles]
+                        thrpt:  [0.4704 cpb 0.4653 cpb 0.4607 cpb]
+Found 5 outliers among 100 measurements (5.00%)
+  5 (5.00%) low mild
+
+multimixer_128/256 (cached)
+                        time:   [83.8926 cycles 84.0747 cycles 84.2476 cycles]
+                        thrpt:  [0.1645 cpb 0.1642 cpb 0.1639 cpb]
+multimixer_128/256 (random)
+                        time:   [163.5131 cycles 164.1794 cycles 164.9104 cycles]
+                        thrpt:  [0.3221 cpb 0.3207 cpb 0.3194 cpb]
+Found 4 outliers among 100 measurements (4.00%)
+  2 (2.00%) low severe
+  2 (2.00%) low mild
+
+multimixer_128/512 (cached)
+                        time:   [165.7976 cycles 166.0641 cycles 166.3238 cycles]
+                        thrpt:  [0.1624 cpb 0.1622 cpb 0.1619 cpb]
+Found 7 outliers among 100 measurements (7.00%)
+  1 (1.00%) low mild
+  5 (5.00%) high mild
+  1 (1.00%) high severe
+multimixer_128/512 (random)
+                        time:   [268.4880 cycles 269.9241 cycles 271.4020 cycles]
+                        thrpt:  [0.2650 cpb 0.2636 cpb 0.2622 cpb]
+Found 1 outliers among 100 measurements (1.00%)
+  1 (1.00%) high mild
+
+multimixer_128/1024 (cached)
+                        time:   [319.1888 cycles 319.5246 cycles 319.8942 cycles]
+                        thrpt:  [0.1562 cpb 0.1560 cpb 0.1559 cpb]
+Found 9 outliers among 100 measurements (9.00%)
+  5 (5.00%) high mild
+  4 (4.00%) high severe
 multimixer_128/1024 (random)
-                        time:   [521.7002 cycles 526.6490 cycles 531.1559 cycles]
-                        thrpt:  [0.2594 cpb 0.2572 cpb 0.2547 cpb]
+                        time:   [461.6959 cycles 465.0396 cycles 468.2226 cycles]
+                        thrpt:  [0.2286 cpb 0.2271 cpb 0.2254 cpb]
 
 multimixer_128/2048 (cached)
-                        time:   [749.0771 cycles 749.6615 cycles 750.2349 cycles]
-                        thrpt:  [0.1832 cpb 0.1830 cpb 0.1829 cpb]
-Found 10 outliers among 100 measurements (10.00%)
-  2 (2.00%) low mild
-  6 (6.00%) high mild
-  2 (2.00%) high severe
-multimixer_128/2048 (random)
-                        time:   [989.7291 cycles 1001.5923 cycles 1012.1123 cycles]
-                        thrpt:  [0.2471 cpb 0.2445 cpb 0.2416 cpb]
-
-multimixer_128/4096 (cached)
-                        time:   [1467.8455 cycles 1468.2857 cycles 1468.7237 cycles]
-                        thrpt:  [0.1793 cpb 0.1792 cpb 0.1792 cpb]
+                        time:   [609.2881 cycles 609.7706 cycles 610.2736 cycles]
+                        thrpt:  [0.1490 cpb 0.1489 cpb 0.1488 cpb]
 Found 6 outliers among 100 measurements (6.00%)
   3 (3.00%) high mild
   3 (3.00%) high severe
+multimixer_128/2048 (random)
+                        time:   [848.1066 cycles 858.2579 cycles 867.1351 cycles]
+                        thrpt:  [0.2117 cpb 0.2095 cpb 0.2071 cpb]
+
+multimixer_128/4096 (cached)
+                        time:   [1189.4965 cycles 1190.0296 cycles 1190.6192 cycles]
+                        thrpt:  [0.1453 cpb 0.1453 cpb 0.1452 cpb]
+Found 8 outliers among 100 measurements (8.00%)
+  5 (5.00%) high mild
+  3 (3.00%) high severe
 multimixer_128/4096 (random)
-                        time:   [1837.5680 cycles 1858.4250 cycles 1875.8456 cycles]
-                        thrpt:  [0.2290 cpb 0.2269 cpb 0.2243 cpb]
+                        time:   [1541.4178 cycles 1557.3923 cycles 1570.5377 cycles]
+                        thrpt:  [0.1917 cpb 0.1901 cpb 0.1882 cpb]
 ```
 
 ## Usage
