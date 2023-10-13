@@ -21,7 +21,7 @@ crunchy = "=0.2.2"
 rand = "=0.8.5"
 hex = "=0.4.3"
 criterion = "=0.5.1"
-criterion-cycles-per-byte = "=0.5.0"
+criterion-cycles-per-byte = {git = "https://github.com/itzmeanjan/criterion-cycles-per-byte", rev = "2dc25c6"}
 
 [lib]
 bench = false
