@@ -1,6 +1,11 @@
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion, Throughput};
-use criterion_cycles_per_byte::CyclesPerByte;
 use rand::{thread_rng, Rng, RngCore};
+#[cfg(any(
+    target_arch = "x86_64",
+    target_arch = "x86",
+    target_arch = "loongarch64"
+))]
+use criterion_cycles_per_byte::CyclesPerByte;
 
 #[cfg(any(
     target_arch = "x86_64",
