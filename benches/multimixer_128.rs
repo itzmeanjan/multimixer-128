@@ -1,11 +1,11 @@
 use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion, Throughput};
-use rand::{thread_rng, Rng, RngCore};
 #[cfg(any(
     target_arch = "x86_64",
     target_arch = "x86",
     target_arch = "loongarch64"
 ))]
 use criterion_cycles_per_byte::CyclesPerByte;
+use rand::{thread_rng, Rng, RngCore};
 
 #[cfg(any(
     target_arch = "x86_64",
@@ -51,7 +51,7 @@ fn multimixer_128(c: &mut CriterionCPB) {
     let mut rng = thread_rng();
 
     const MIN_MLEN: usize = multimixer_128::BLOCK_SIZE;
-    const MAX_MLEN: usize = 4096;
+    const MAX_MLEN: usize = 8192;
 
     let mut mlen = MIN_MLEN;
     while mlen <= MAX_MLEN {
@@ -60,7 +60,7 @@ fn multimixer_128(c: &mut CriterionCPB) {
         let mut group = c.benchmark_group("multimixer_128");
         group.throughput(Throughput::Bytes((2 * mlen) as u64));
 
-        group.bench_function(format!("{} (cached)", mlen), |bench| {
+        group.bench_function(format!("{}B key/ msg (cached)", mlen), |bench| {
             let mut key = vec![0u8; mlen];
             let mut msg = vec![0u8; mlen];
             let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
@@ -76,21 +76,21 @@ fn multimixer_128(c: &mut CriterionCPB) {
                 )
             })
         });
-        group.bench_function(format!("{} (random)", mlen), |bench| {
+        group.bench_function(format!("{}B key/ msg (random)", mlen), |bench| {
             let mut key = vec![0u8; mlen];
             let mut msg = vec![0u8; mlen];
-            let mut dig = [0u8; multimixer_128::DIGEST_SIZE];
+            let dig = [0u8; multimixer_128::DIGEST_SIZE];
 
             rng.fill_bytes(&mut key);
             rng.fill_bytes(&mut msg);
 
             bench.iter_batched(
-                || (key.clone(), msg.clone()),
-                |(_key, _msg)| {
+                || (key.clone(), msg.clone(), dig.clone()),
+                |(_key, _msg, mut _dig)| {
                     multimixer_128::multimixer_128(
                         black_box(&_key),
                         black_box(&_msg),
-                        black_box(&mut dig),
+                        black_box(&mut _dig),
                     )
                 },
                 BatchSize::SmallInput,
@@ -98,7 +98,7 @@ fn multimixer_128(c: &mut CriterionCPB) {
         });
 
         group.finish();
-        mlen = 2 * mlen;
+        mlen *= 4;
     }
 }
 
