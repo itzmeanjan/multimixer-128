@@ -107,6 +107,11 @@ Using $Multimixer_{128}$ hasher API is pretty straight-forward.
 multimixer-128 = { git = "https://github.com/itzmeanjan/multimixer-128" }
 # or
 multimixer-128 = "0.1.0"
+
+# In case you're also interested in using f_128, the public function of multimixer-128,
+# enable `internal` feature-gate of this crate.
+#
+# multimixer-128 = { version = "0.1.0", features = "internal" }
 ```
 
 2) Get non-zero, equal length key and message s.t. their byte length is a multiple of block size (= 32 -bytes), as input.
@@ -147,3 +152,6 @@ Key     = e02f28d290bd51df3b103396debe7f2ffc90b837588e37b13a7cc8cccce9fa11
 Message = 1511ad54daae3df6706e33d9953f5dff4eabb2da85ad1added1aba2e0b571397
 Digest  = d2324595d842cb028205c1f00328ba760d292a690452726d95728070ee7ff21e8e6af14b1e4c6d15404e709fd1fec952da3e3b7b3fe7d038fca793f3b4d7661a
 ```
+
+> **Note**
+Most of the internal functions of this library crate are implemented as `const fn` i.e. compile-time evaluable functions. That's why I also maintain another example [f_128.rs](./examples/f_128.rs) which demonstrates that property of this library using static assertions. Try executing the example program by issuing `$ cargo run --example f_128 --features="internal"` and you'll see it.
