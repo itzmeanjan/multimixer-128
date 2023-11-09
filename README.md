@@ -40,7 +40,10 @@ cargo test --lib
 Issue following command for benchmarking public function $f_{128}$ and $Multimixer_{128}$, with variable ( non-zero multiple of 32 -bytes ) length input key and message, on target CPU.
 
 > **Note**
-When benchmarking on `x86`, `x86_64`, `loongarch64` targets, CPU cycles and cycles/ byte metrics are reported, using `rdtsc` instruction, though for other targets, default wallclock timer of criterion.rs is used for reporting time and throughput. I found https://github.com/pornin/crrl/blob/73b33c1efc73d637f3084d197353991a22c10366/benches/util.rs pretty useful for obtaining CPU cycles when benchmarking Rust functions. But I'm using criterion.rs as benchmark harness, hence I decided to go with https://crates.io/crates/criterion-cycles-per-byte plugin, much easier to integrate.
+When benchmarking on `x86`, `x86_64`, `aarch64` or `loongarch64` targets, CPU cycles and cycles/ byte metrics are reported, while for other targets, default wallclock timer of criterion.rs is used for reporting time and throughput. I found https://github.com/pornin/crrl/blob/73b33c1efc73d637f3084d197353991a22c10366/benches/util.rs pretty useful for obtaining CPU cycles when benchmarking Rust functions. But I'm using criterion.rs as benchmark harness, hence I decided to go with https://crates.io/crates/criterion-cycles-per-byte plugin, much easier to integrate. But I had to patch it for my usecase and they live in the branch `add-memfence` of my fork of `criterion-cycles-per-byte` ( see my commits @ https://github.com/itzmeanjan/criterion-cycles-per-byte/commits/add-memfence ).
+
+> **Note**
+In case you're running benchmarks on aarch64 target, consider reading https://github.com/itzmeanjan/criterion-cycles-per-byte/blob/d2f5bf8638640962a9b301966dbb3e65fbc6f283/src/lib.rs#L63-L70.
 
 > **Warning**
 When benchmarking make sure you've disabled CPU frequency scaling, otherwise numbers you see can be pretty misleading. I found https://github.com/google/benchmark/blob/b40db869/docs/reducing_variance.md helpful.
@@ -96,6 +99,50 @@ multimixer_128/8192B key/ msg (random)
                         thrpt:  [0.1745 cpb 0.1733 cpb 0.1719 cpb]
 ```
 
+### On *ARM Cortex-A72 i.e. Raspberry Pi 4B*
+
+```bash
+f_128/f-128 (cached)    time:   [33.5869 cycles 33.6835 cycles 33.7842 cycles]                   
+                        thrpt:  [1.0558 cpb 1.0526 cpb 1.0496 cpb]
+f_128/f-128 (random)    time:   [118.9137 cycles 119.6657 cycles 120.5443 cycles]               
+                        thrpt:  [3.7670 cpb 3.7396 cpb 3.7161 cpb]
+
+multimixer_128/32B key/ msg (cached)                                                                            
+                        time:   [189.0723 cycles 189.1691 cycles 189.2789 cycles]
+                        thrpt:  [2.9575 cpb 2.9558 cpb 2.9543 cpb]
+multimixer_128/32B key/ msg (random)                                                                             
+                        time:   [433.4768 cycles 436.1863 cycles 438.5723 cycles]
+                        thrpt:  [6.8527 cpb 6.8154 cpb 6.7731 cpb]
+
+multimixer_128/128B key/ msg (cached)                                                                            
+                        time:   [699.8622 cycles 699.9601 cycles 700.0751 cycles]
+                        thrpt:  [2.7347 cpb 2.7342 cpb 2.7338 cpb]
+multimixer_128/128B key/ msg (random)                                                                             
+                        time:   [978.8853 cycles 979.8636 cycles 980.9012 cycles]
+                        thrpt:  [3.8316 cpb 3.8276 cpb 3.8238 cpb]
+
+multimixer_128/512B key/ msg (cached)                                                                             
+                        time:   [2742.5257 cycles 2743.5495 cycles 2744.8465 cycles]
+                        thrpt:  [2.6805 cpb 2.6792 cpb 2.6782 cpb]
+multimixer_128/512B key/ msg (random)                                                                             
+                        time:   [3223.0299 cycles 3228.1490 cycles 3233.4994 cycles]
+                        thrpt:  [3.1577 cpb 3.1525 cpb 3.1475 cpb]
+
+multimixer_128/2048B key/ msg (cached)                                                                             
+                        time:   [10932.5461 cycles 10935.6646 cycles 10939.9686 cycles]
+                        thrpt:  [2.6709 cpb 2.6698 cpb 2.6691 cpb]
+multimixer_128/2048B key/ msg (random)                                                                             
+                        time:   [12448.8476 cycles 12496.1792 cycles 12541.6384 cycles]
+                        thrpt:  [3.0619 cpb 3.0508 cpb 3.0393 cpb]
+
+multimixer_128/8192B key/ msg (cached)                                                                             
+                        time:   [44770.5750 cycles 44779.3846 cycles 44790.3585 cycles]
+                        thrpt:  [2.7338 cpb 2.7331 cpb 2.7326 cpb]
+multimixer_128/8192B key/ msg (random)                                                                             
+                        time:   [45914.0882 cycles 45978.0062 cycles 46044.7573 cycles]
+                        thrpt:  [2.8103 cpb 2.8063 cpb 2.8024 cpb]
+```
+
 ## Usage
 
 Using $Multimixer_{128}$ hasher API is pretty straight-forward.
@@ -106,12 +153,12 @@ Using $Multimixer_{128}$ hasher API is pretty straight-forward.
 [dependencies]
 multimixer-128 = { git = "https://github.com/itzmeanjan/multimixer-128" }
 # or
-multimixer-128 = "0.1.1"
+multimixer-128 = "0.1.2"
 
 # In case you're also interested in using f_128, the public function of multimixer-128,
 # enable `internal` feature-gate of this crate.
 #
-# multimixer-128 = { version = "0.1.1", features = "internal" }
+# multimixer-128 = { version = "0.1.2", features = "internal" }
 ```
 
 2) Get non-zero, equal length key and message s.t. their byte length is a multiple of block size (= 32 -bytes), as input.

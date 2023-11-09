@@ -19,4 +19,6 @@ jobs:
     - name: Run Known Answer Tests
       run: cargo test --lib
     - name: Run Examples
-      run: cargo run --example multimixer_128
+      run: |
+        cargo run --example multimixer_128
+        cargo run --example f_128 --features="internal"
