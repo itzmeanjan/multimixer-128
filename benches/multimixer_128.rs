@@ -2,6 +2,7 @@ use criterion::{black_box, criterion_group, criterion_main, BatchSize, Criterion
 #[cfg(any(
     target_arch = "x86_64",
     target_arch = "x86",
+    target_arch = "aarch64",
     target_arch = "loongarch64"
 ))]
 use criterion_cycles_per_byte::CyclesPerByte;
@@ -10,6 +11,7 @@ use rand::{thread_rng, Rng, RngCore};
 #[cfg(any(
     target_arch = "x86_64",
     target_arch = "x86",
+    target_arch = "aarch64",
     target_arch = "loongarch64"
 ))]
 type CriterionCPB = Criterion<CyclesPerByte>;
@@ -17,6 +19,7 @@ type CriterionCPB = Criterion<CyclesPerByte>;
 #[cfg(not(any(
     target_arch = "x86_64",
     target_arch = "x86",
+    target_arch = "aarch64",
     target_arch = "loongarch64"
 )))]
 type CriterionCPB = Criterion;
@@ -105,6 +108,7 @@ fn multimixer_128(c: &mut CriterionCPB) {
 #[cfg(any(
     target_arch = "x86_64",
     target_arch = "x86",
+    target_arch = "aarch64",
     target_arch = "loongarch64"
 ))]
 criterion_group!(name = keyed_hashing; config = Criterion::default().with_measurement(CyclesPerByte); targets = f_128, multimixer_128);
@@ -112,6 +116,7 @@ criterion_group!(name = keyed_hashing; config = Criterion::default().with_measur
 #[cfg(not(any(
     target_arch = "x86_64",
     target_arch = "x86",
+    target_arch = "aarch64",
     target_arch = "loongarch64"
 )))]
 criterion_group!(keyed_hashing, f_128, multimixer_128);
