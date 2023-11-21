@@ -153,12 +153,12 @@ Using $Multimixer_{128}$ hasher API is pretty straight-forward.
 [dependencies]
 multimixer-128 = { git = "https://github.com/itzmeanjan/multimixer-128" }
 # or
-multimixer-128 = "0.1.2"
+multimixer-128 = "0.1.3"
 
 # In case you're also interested in using f_128, the public function of multimixer-128,
 # enable `internal` feature-gate of this crate.
 #
-# multimixer-128 = { version = "0.1.2", features = "internal" }
+# multimixer-128 = { version = "0.1.3", features = "internal" }
 ```
 
 2) Get non-zero, equal length key and message s.t. their byte length is a multiple of block size (= 32 -bytes), as input.
