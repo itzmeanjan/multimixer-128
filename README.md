@@ -20,7 +20,7 @@ Rust stable toolchain; see https://rustup.rs for installation guide.
 $ rustc --version
 rustc 1.73.0 (cc66ad468 2023-10-03)
 ```
-
+> [!TIP]
 I advise you to use `cargo-criterion` for running benchmark executable. Read more about it @ https://crates.io/crates/cargo-criterion. You can just issue following command for installing it system-wide.
 
 ```bash
@@ -39,14 +39,14 @@ cargo test --lib
 
 Issue following command for benchmarking public function $f_{128}$ and $Multimixer_{128}$, with variable ( non-zero multiple of 32 -bytes ) length input key and message, on target CPU.
 
-> **Note**
-When benchmarking on `x86`, `x86_64`, `aarch64` or `loongarch64` targets, CPU cycles and cycles/ byte metrics are reported, while for other targets, default wallclock timer of criterion.rs is used for reporting time and throughput. I found https://github.com/pornin/crrl/blob/73b33c1efc73d637f3084d197353991a22c10366/benches/util.rs pretty useful for obtaining CPU cycles when benchmarking Rust functions. But I'm using criterion.rs as benchmark harness, hence I decided to go with https://crates.io/crates/criterion-cycles-per-byte plugin, much easier to integrate. But I had to patch it for my usecase and they live in the branch `add-memfence` of my fork of `criterion-cycles-per-byte` ( see my commits @ https://github.com/itzmeanjan/criterion-cycles-per-byte/commits/add-memfence ).
+> [!NOTE]
+> When benchmarking on `x86`, `x86_64`, `aarch64` or `loongarch64` targets, CPU cycles and cycles/ byte metrics are reported, while for other targets, default wallclock timer of criterion.rs is used for reporting time and throughput. I found https://github.com/pornin/crrl/blob/73b33c1efc73d637f3084d197353991a22c10366/benches/util.rs pretty useful for obtaining CPU cycles when benchmarking Rust functions. But I'm using criterion.rs as benchmark harness, hence I decided to go with https://crates.io/crates/criterion-cycles-per-byte plugin, much easier to integrate. But I had to patch it for my usecase and they live in the branch `add-memfence` of my fork of `criterion-cycles-per-byte` ( see my commits @ https://github.com/itzmeanjan/criterion-cycles-per-byte/commits/add-memfence ).
 
-> **Note**
-In case you're running benchmarks on aarch64 target, consider reading https://github.com/itzmeanjan/criterion-cycles-per-byte/blob/d2f5bf8638640962a9b301966dbb3e65fbc6f283/src/lib.rs#L63-L70.
+> [!NOTE]
+> In case you're running benchmarks on aarch64 target, consider reading https://github.com/itzmeanjan/criterion-cycles-per-byte/blob/d2f5bf8638640962a9b301966dbb3e65fbc6f283/src/lib.rs#L63-L70.
 
-> **Warning**
-When benchmarking make sure you've disabled CPU frequency scaling, otherwise numbers you see can be pretty misleading. I found https://github.com/google/benchmark/blob/b40db869/docs/reducing_variance.md helpful.
+> [!CAUTION]
+> When benchmarking make sure you've disabled CPU frequency scaling, otherwise numbers you see can be pretty misleading. I found https://github.com/google/benchmark/blob/b40db869/docs/reducing_variance.md helpful.
 
 ```bash
 # In case you didn't install `cargo-criterion`, you have to run benchmark with
@@ -200,5 +200,5 @@ Message = 1511ad54daae3df6706e33d9953f5dff4eabb2da85ad1added1aba2e0b571397
 Digest  = d2324595d842cb028205c1f00328ba760d292a690452726d95728070ee7ff21e8e6af14b1e4c6d15404e709fd1fec952da3e3b7b3fe7d038fca793f3b4d7661a
 ```
 
-> **Note**
-Most of the internal functions of this library crate are implemented as `const fn` i.e. compile-time evaluable functions. That's why I also maintain another example [f_128.rs](./examples/f_128.rs) which demonstrates that property of this library using static assertions. Try executing the example program by issuing `$ cargo run --example f_128 --features="internal"` and you'll see it.
+> [!NOTE]
+> Most of the internal functions of this library crate are implemented as `const fn` i.e. compile-time evaluable functions. That's why I also maintain another example [f_128.rs](./examples/f_128.rs) which demonstrates that property of this library using static assertions. Try executing the example program by issuing `$ cargo run --example f_128 --features="internal"` and you'll see it.
